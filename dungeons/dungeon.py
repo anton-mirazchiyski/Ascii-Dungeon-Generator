@@ -42,14 +42,28 @@ def position_is_available(row, col, dungeon):
     return all(conditions)
 
 
+def mark_cell(dungeon, row, col):
+    dungeon[row][col] = '.'
+
+
+def create_room(row, col, dungeon):
+    if dungeon[row + 1][col] != '#' or dungeon[row][col + 1] != '#' or dungeon[row + 1][col + 1] != '#':
+        return
+    mark_cell(dungeon, row, col + 1)
+    mark_cell(dungeon, row + 1, col + 1)
+    mark_cell(dungeon, row + 1, col)
+    mark_cell(dungeon, row, col)
+
+
+
 def generate_rooms(dungeon):
     number_of_rooms = random.randint(2, 6)
 
     for _ in range(number_of_rooms):
-        random_position = (random.randint(start_idx + 1, end_index - 1), random.randint(start_idx + 1, end_index - 1)) # excludes the edges
+        random_position = (random.randint(start_idx + 1, end_index - 1), random.randint(start_idx + 1, end_index - 2)) # excludes the edges
         current_row, current_col = random_position
         if position_is_available(current_row, current_col, dungeon):
-            pass
+            create_room(current_row, current_col, dungeon)
 
 
 dungeon = build_dungeon_without_rooms()
