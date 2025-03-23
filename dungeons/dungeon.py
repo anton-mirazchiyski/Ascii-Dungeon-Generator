@@ -32,12 +32,17 @@ def determine_start_position(dungeon):
 
 
 def position_is_available(row, col, dungeon):
+    if row + 1 > end_index - 1 or col + 1 > end_index - 1:
+        return False
+
     conditions = [
-        dungeon[row][col] != '.' ,
-        dungeon[row - 1][col] != '.',
-        dungeon[row + 1][col] != '.',
-        dungeon[row][col - 1] != '.',
-        dungeon[row][col + 1] != '.',
+        dungeon[row][col] == '#' ,
+        dungeon[row - 1][col] == '#',
+        dungeon[row + 1][col] == '#',
+        dungeon[row][col - 1] == '#',
+        dungeon[row][col + 1] == '#',
+        dungeon[row + 2][col] == '#',
+        dungeon[row][col + 2] == '#'
     ]
     return all(conditions)
 
@@ -46,22 +51,23 @@ def mark_cell(dungeon, row, col):
     dungeon[row][col] = '.'
 
 
+def generate_random_room_position():
+    return random.randint(start_idx + 1, end_index - 1), random.randint(start_idx + 1, end_index - 2) # excludes the edges
+
+
 def create_room(row, col, dungeon):
-    if dungeon[row + 1][col] != '#' or dungeon[row][col + 1] != '#' or dungeon[row + 1][col + 1] != '#':
-        return
     mark_cell(dungeon, row, col + 1)
     mark_cell(dungeon, row + 1, col + 1)
     mark_cell(dungeon, row + 1, col)
     mark_cell(dungeon, row, col)
 
 
-
 def generate_rooms(dungeon):
     number_of_rooms = random.randint(2, 6)
 
     for _ in range(number_of_rooms):
-        random_position = (random.randint(start_idx + 1, end_index - 1), random.randint(start_idx + 1, end_index - 2)) # excludes the edges
-        current_row, current_col = random_position
+        random_room_position = generate_random_room_position()
+        current_row, current_col = random_room_position
         if position_is_available(current_row, current_col, dungeon):
             create_room(current_row, current_col, dungeon)
 
