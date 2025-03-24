@@ -33,18 +33,21 @@ def determine_start_position(dungeon):
 
 def position_is_available(row, col, dungeon):
     if row + 1 > end_index - 1 or col + 1 > end_index - 1:
-        return False
+        return
 
-    conditions = [
-        dungeon[row][col] == '#' ,
-        dungeon[row - 1][col] == '#',
-        dungeon[row + 1][col] == '#',
-        dungeon[row][col - 1] == '#',
-        dungeon[row][col + 1] == '#',
-        dungeon[row + 2][col] == '#',
-        dungeon[row][col + 2] == '#'
+    # a list of unavailable coordinates that keep the rooms spaced out
+    unavailable_coordinates = [
+        (row - 1, col - 1), (row - 1, col), (row - 1, col + 1), (row - 1, col + 2),
+        (row, col), (row, col - 1), (row, col + 1), (row, col + 2),
+        (row + 1, col - 1), (row + 1, col), (row + 1, col + 1), (row + 1, col + 2),
+        (row + 2, col - 1), (row + 2, col), (row + 2, col + 1), (row + 2, col + 2),
     ]
-    return all(conditions)
+
+    for current_row, current_col in unavailable_coordinates:
+        if dungeon[current_row][current_col] != '#':
+            return
+
+    return True
 
 
 def mark_cell(dungeon, row, col):
