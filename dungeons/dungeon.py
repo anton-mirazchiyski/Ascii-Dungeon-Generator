@@ -1,7 +1,12 @@
 import random
 
+import colorama
+from colorama import Fore, Style
+
 size = 10
 start_idx, end_index = 0, (size - 1)
+
+colorama.init()
 
 
 def build_dungeon_without_rooms():
@@ -28,7 +33,7 @@ def determine_start_position(dungeon):
             random_coordinates = (random.randint(start_idx, end_index), end_index)
 
     start_row, start_col = random_coordinates
-    dungeon[start_row][start_col] = '.'
+    dungeon[start_row][start_col] = Fore.YELLOW + '.' + Style.RESET_ALL
 
 
 def position_is_available(row, col, dungeon):
@@ -51,7 +56,7 @@ def position_is_available(row, col, dungeon):
 
 
 def mark_cell(dungeon, row, col):
-    dungeon[row][col] = '.'
+    dungeon[row][col] = Fore.BLUE + 'r' + Style.RESET_ALL
 
 
 def generate_random_room_position():
@@ -66,9 +71,9 @@ def create_room(row, col, dungeon):
 
 
 def generate_rooms(dungeon):
-    number_of_rooms = random.randint(2, 6)
+    possible_number_of_rooms = random.randint(2, 7)
 
-    for _ in range(number_of_rooms):
+    for _ in range(possible_number_of_rooms):
         random_room_position = generate_random_room_position()
         current_row, current_col = random_room_position
         if position_is_available(current_row, current_col, dungeon):
