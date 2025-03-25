@@ -37,9 +37,6 @@ def determine_start_position(dungeon):
 
 
 def position_is_available(row, col, dungeon):
-    if row + 1 > end_index - 1 or col + 1 > end_index - 1:
-        return
-
     # a list of unavailable coordinates that keep the rooms spaced out
     unavailable_coordinates = [
         (row - 1, col - 1), (row - 1, col), (row - 1, col + 1), (row - 1, col + 2),
@@ -60,7 +57,8 @@ def mark_cell(dungeon, row, col):
 
 
 def generate_random_room_position():
-    return random.randint(start_idx + 1, end_index - 1), random.randint(start_idx + 1, end_index - 2) # excludes the edges
+    # excludes the edges and keeps the rooms within boundaries
+    return random.randint(start_idx + 1, end_index - 2), random.randint(start_idx + 1, end_index - 2)
 
 
 def create_room(row, col, dungeon):
@@ -84,5 +82,6 @@ dungeon = build_dungeon_without_rooms()
 determine_start_position(dungeon)
 generate_rooms(dungeon)
 
+print()
 for row in dungeon:
     print(*row, sep='')
