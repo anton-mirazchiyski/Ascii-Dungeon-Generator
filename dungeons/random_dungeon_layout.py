@@ -3,7 +3,7 @@ import random
 import colorama
 from colorama import Fore, Style
 
-size = 10
+size = 15
 start_idx, end_index = 0, (size - 1)
 
 colorama.init()
@@ -33,7 +33,7 @@ def determine_start_position(dungeon):
             random_coordinates = (random.randint(start_idx, end_index), end_index)
 
     start_row, start_col = random_coordinates
-    dungeon[start_row][start_col] = Fore.YELLOW + '.' + Style.RESET_ALL
+    dungeon[start_row][start_col] = Fore.YELLOW + 's' + Style.RESET_ALL
 
     return start_row, start_col
 
@@ -91,7 +91,7 @@ def generate_rooms(dungeon):
 
 
 def mark_corridor_cell(dungeon, row, col):
-    dungeon[row][col] = '.'
+    dungeon[row][col] = Fore.YELLOW + '.' + Style.RESET_ALL
 
 
 def is_out_of_bounds(row, col):
@@ -103,15 +103,40 @@ def sort_coordinates_increasingly(coordinates):
     return sorted_coordinates
 
 
-def generate_corridors(dungeon, row, col):
-    pass
+def create_corridor(dungeon, row, col, previous_row, previous_col):
+    if row == previous_row and col == previous_col:
+        return
+
+    if dungeon[row][col] != 's' and is_out_of_bounds(previous_row, previous_col):
+        return
+
+    if dungeon[previous_row][previous_col] == '#':
+        mark_corridor_cell(dungeon, previous_row, previous_col)
+
+    if row != previous_row:
+        create_corridor(dungeon, row, col, previous_row + 1, previous_col) # move downwards
+
+    if row == previous_row:
+        if col > previous_col:
+            create_corridor(dungeon, row, col, previous_row, previous_col + 1) # move towards the right
+
+        if col < previous_col:
+            create_corridor(dungeon, row, col, previous_row, previous_col - 1) # move towards the left
+
+
+def generate_corridors(dungeon, rooms_coordinates):
+    for idx in range(1, len(rooms_coordinates)):
+        current_row, current_col = rooms_coordinates[idx]
+        previous_row, previous_col = rooms_coordinates[idx - 1]
+        create_corridor(dungeon, current_row, current_col, previous_row, previous_col)
 
 
 dungeon = build_dungeon_without_rooms()
 row_start, col_start = determine_start_position(dungeon)
 rooms_coordinates = generate_rooms(dungeon)
-sorted_rooms_coordinates = sort_coordinates_increasingly(rooms_coordinates)
-generate_corridors(dungeon, row_start, col_start)
+sorted_rooms_coordinates = sort_coordinates_increasingly(rooms_coordinates + [(row_start, col_start)])
+# print(sorted_rooms_coordinates)
+generate_corridors(dungeon, sorted_rooms_coordinates)
 
 print()
 for row in dungeon:
