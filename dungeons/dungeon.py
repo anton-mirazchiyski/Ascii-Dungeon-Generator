@@ -98,6 +98,11 @@ def is_out_of_bounds(row, col):
     return row >= end_index or row <= start_idx or col >= end_index or col <= start_idx
 
 
+def sort_coordinates_increasingly(coordinates):
+    sorted_coordinates = sorted(coordinates, key=lambda x: (x[0], x[1]))
+    return sorted_coordinates
+
+
 def generate_corridors(dungeon, row, col):
     pass
 
@@ -105,6 +110,7 @@ def generate_corridors(dungeon, row, col):
 dungeon = build_dungeon_without_rooms()
 row_start, col_start = determine_start_position(dungeon)
 rooms_coordinates = generate_rooms(dungeon)
+sorted_rooms_coordinates = sort_coordinates_increasingly(rooms_coordinates)
 generate_corridors(dungeon, row_start, col_start)
 
 print()
