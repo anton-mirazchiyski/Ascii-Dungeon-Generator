@@ -131,13 +131,21 @@ def generate_corridors(dungeon, rooms_coordinates):
         create_corridor(dungeon, current_row, current_col, previous_row, previous_col)
 
 
-dungeon = build_dungeon_without_rooms()
-row_start, col_start = determine_start_position(dungeon)
-rooms_coordinates = generate_rooms(dungeon)
-sorted_rooms_coordinates = sort_coordinates_increasingly(rooms_coordinates + [(row_start, col_start)])
-# print(sorted_rooms_coordinates)
-generate_corridors(dungeon, sorted_rooms_coordinates)
+def print_dungeon(dungeon):
+    print()
+    for row in dungeon:
+        print(*row, sep=' ')
 
-print()
-for row in dungeon:
-    print(*row, sep=' ')
+
+def generate_dungeon():
+    dungeon = build_dungeon_without_rooms()
+    row_start, col_start = determine_start_position(dungeon)
+    rooms_coordinates = generate_rooms(dungeon)
+    sorted_rooms_coordinates = sort_coordinates_increasingly(rooms_coordinates + [(row_start, col_start)])
+    # print(sorted_rooms_coordinates)
+    generate_corridors(dungeon, sorted_rooms_coordinates)
+    print_dungeon(dungeon)
+
+
+if __name__ == '__main__':
+    generate_dungeon()
