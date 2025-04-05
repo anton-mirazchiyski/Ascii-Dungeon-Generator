@@ -103,6 +103,20 @@ def sort_coordinates_increasingly(coordinates):
     return sorted_coordinates
 
 
+def get_random_room_or_corridor_cell_in_dungeon(dungeon):
+    row_idx, column_idx = None, None
+
+    while True:
+        row_idx = random.randint(start_idx + 1, end_index - 1)
+        row = dungeon[row_idx]
+        column_indices = [idx for idx in range(1, len(row) - 1) if row[idx] != '#']
+        if column_indices:
+            column_idx = random.choice(column_indices)
+            break
+
+    return row_idx, column_idx
+
+
 def create_corridor(dungeon, row, col, previous_row, previous_col):
     if row == previous_row and col == previous_col:
         return
@@ -161,8 +175,8 @@ def generate_dungeon():
     row_start, col_start = determine_start_position(dungeon)
     rooms_coordinates = generate_rooms(dungeon)
     sorted_rooms_coordinates = sort_coordinates_increasingly(rooms_coordinates + [(row_start, col_start)])
-    print(sorted_rooms_coordinates)
     generate_corridors(dungeon, sorted_rooms_coordinates)
+    # generate_additional_corridors(dungeon)
     print_dungeon(dungeon)
 
 
