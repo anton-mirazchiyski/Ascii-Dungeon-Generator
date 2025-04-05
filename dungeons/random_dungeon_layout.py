@@ -164,6 +164,41 @@ def generate_corridors(dungeon, rooms_coordinates):
         create_corridor(dungeon, current_row, current_col, previous_row, previous_col)
 
 
+def generate_additional_corridors(dungeon):
+    directions_mapping = {
+        # linear directions
+        'upwards': lambda r, c: (r - 1, c),
+        'downwards': lambda r, c: (r + 1, c),
+        'left': lambda r, c: (r, c - 1),
+        'right': lambda r, c: (r, c + 1),
+
+        # diagonal directions
+        'upper-left': lambda r, c: (r - 1, c - 1),
+        'upper-right': lambda r, c: (r - 1, c + 1),
+        'bottom-left': lambda r, c: (r + 1, c - 1),
+        'bottom-right': lambda  r, c: (r + 1, c + 1)
+    }
+
+    possible_directions = [direction for direction in directions_mapping.keys()]
+
+    for i in range(3):
+        row, column = get_random_room_or_corridor_cell_in_dungeon(dungeon)
+        direction = random.choice(possible_directions)
+
+        for j in range(5):
+            row, column = directions_mapping[direction](row, column)
+
+            # if j == 1:
+            #     if dungeon[row - 1][column] != '#' or dungeon[row + 1][column] != '#':
+            #         break
+            if dungeon[row][column] != '#':
+                break
+            if is_out_of_bounds(row, column):
+                break
+            mark_corridor_cell(dungeon, row, column)
+            # print(row, column)
+
+
 def print_dungeon(dungeon):
     print()
     for row in dungeon:
