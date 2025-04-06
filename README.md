@@ -25,24 +25,30 @@ _A Python script 🐍 for generating random dungeon layouts with entrance, rooms
 ![Dungeon-4](https://github.com/user-attachments/assets/0c9e5293-298b-42c7-987c-55fd3688eeb0)
 
 
-Added more corridors (including diagonal ones) to make the dungeon more interesting, diverse and have more exploration options
+Added more corridors (including diagonal ones) to make the dungeon more interesting, diverse and have more exploration options.
+There could be dead-end corridors.
 
 
-![Dungeon-5](https://github.com/user-attachments/assets/a007d965-ee31-468b-8598-090a0737b47e)
+![Dungeon-8](https://github.com/user-attachments/assets/dddc9748-a362-421c-9e04-3fc99901908b)
 
 
-![Dungeon-6](https://github.com/user-attachments/assets/2ee5317a-c99f-41e4-b001-f1ec3ca413f8)
+![Dungeon-9](https://github.com/user-attachments/assets/7e849a63-b7d7-4f70-a07f-d8c0de616b3f)
 
 
-![Dungeon-7](https://github.com/user-attachments/assets/c2cf77e5-c066-4781-81fb-30b4853299f8)
+![Dungeon-10](https://github.com/user-attachments/assets/a093cfc2-c68e-4ab7-b02a-9c23d3b3e50e)
+
+
+![Dungeon-11](https://github.com/user-attachments/assets/d606bf21-7b15-435d-acfc-30369b7920df)
 
 
 ### Representations:
 
-- Rooms (squares of 'r' letters) - 🔵
-- Corridors ('.') - 🟡
-- Entrance ('s') - 🟡
-- Walls (#) - ⚪
+- Rooms (squares of 'r' letters) - 🟦
+- Corridors - 🟨
+-   - linear - dots
+-   - diagonal - arrows
+- Entrance ('s') - 🟨
+- Walls (#) - ⬜
 
 
 ## Installation and Usage
@@ -76,3 +82,7 @@ python random_dungeon_layout.py
 ## Feedback & Suggestions
 
 If you have any feedback, feel free to message me! I'm always open to suggestions.
+
+Feel free to add a ⭐ if you liked this.
+
+Discussions are open.
