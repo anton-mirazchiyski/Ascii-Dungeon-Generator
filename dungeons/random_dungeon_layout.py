@@ -145,7 +145,7 @@ def create_corridor(dungeon, row, col, previous_row, previous_col):
         return create_corridor(dungeon, row, col, previous_row, previous_col - 1)  # move towards the left
 
 
-def generate_corridors(dungeon, rooms_coordinates):
+def generate_corridors_between_rooms(dungeon, rooms_coordinates):
     for idx in range(1, len(rooms_coordinates)):
         current_row, current_col = rooms_coordinates[idx]
         previous_row, previous_col = rooms_coordinates[idx - 1]
@@ -181,21 +181,24 @@ def generate_additional_corridors(dungeon):
 
     possible_directions = [direction for direction in directions_mapping.keys()]
 
-    for i in range(3):
+    for i in range(random.randint(3, 6)):
         row, column = get_random_room_or_corridor_cell_in_dungeon(dungeon)
         direction = random.choice(possible_directions)
 
-        for j in range(5):
+        for j in range(random.randint(3, 7)):
             row, column = directions_mapping[direction](row, column)
 
-            # if j == 1:
-            #     if dungeon[row - 1][column] != '#' or dungeon[row + 1][column] != '#':
-            #         break
-            if dungeon[row][column] != '#':
-                break
             if is_out_of_bounds(row, column):
                 break
-            mark_corridor_cell(dungeon, row, column)
+            if j == 1:
+                # avoids more double corridors
+                if dungeon[row - 1][column] == '.' or dungeon[row + 1][column] == '.':
+                    break
+            if dungeon[row][column] != '#':
+                direction = random.choice(possible_directions)
+                continue
+            else:
+                mark_corridor_cell(dungeon, row, column)
             # print(row, column)
 
 
@@ -220,8 +223,8 @@ def generate_dungeon():
     row_start, col_start = determine_start_position(dungeon)
     rooms_coordinates = generate_rooms(dungeon)
     sorted_rooms_coordinates = sort_coordinates_increasingly(rooms_coordinates + [(row_start, col_start)])
-    generate_corridors(dungeon, sorted_rooms_coordinates)
-    # generate_additional_corridors(dungeon)
+    generate_corridors_between_rooms(dungeon, sorted_rooms_coordinates)
+    generate_additional_corridors(dungeon)
     print_dungeon(dungeon)
 
 
