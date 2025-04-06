@@ -168,6 +168,19 @@ def generate_corridors_between_rooms(dungeon, rooms_coordinates):
         create_corridor(dungeon, current_row, current_col, previous_row, previous_col)
 
 
+def mark_diagonal_corridor_cell(dungeon, row, col, direction):
+    # use unicode arrows for diagonal corridors
+    match direction:
+        case 'upper-left':
+            dungeon[row][col] = '↖'
+        case 'upper-right':
+            dungeon[row][col] = '↗'
+        case 'bottom-left':
+            dungeon[row][col] = '↙'
+        case 'bottom-right':
+            dungeon[row][col] = '↘'
+
+
 def generate_additional_corridors(dungeon):
     directions_mapping = {
         # linear directions
@@ -195,14 +208,18 @@ def generate_additional_corridors(dungeon):
             if is_out_of_bounds(row, column):
                 break
             # avoids more double corridors
-            if (is_part_of_corridor(dungeon, row - 1, column) and is_part_of_corridor(dungeon, row + 1, column))\
-                    or (is_part_of_corridor(dungeon, row, column - 1) and is_part_of_corridor(dungeon, row, column + 1)):
-                break
+            if j == 1:
+                if (is_part_of_corridor(dungeon, row - 1, column) or is_part_of_corridor(dungeon, row + 1, column))\
+                        or (is_part_of_corridor(dungeon, row, column - 1) or is_part_of_corridor(dungeon, row, column + 1)):
+                    break
             if dungeon[row][column] != '#':
                 direction = random.choice(possible_directions)
                 continue
-            else:
+
+            if direction in possible_directions[:4]:
                 mark_corridor_cell(dungeon, row, column)
+            else:
+                mark_diagonal_corridor_cell(dungeon, row, column, direction)
             # print(row, column)
 
 
@@ -214,7 +231,7 @@ def print_dungeon(dungeon):
         for element in row:
             if element == 'r':
                 colored_row.append(Fore.BLUE + element + Style.RESET_ALL)
-            elif element in ('.', 's'):
+            elif element in ('.', 's', '↖', '↗', '↙', '↘'):
                 colored_row.append(Fore.YELLOW + element + Style.RESET_ALL)
             else:
                 colored_row.append(element)
