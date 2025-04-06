@@ -25,6 +25,18 @@ _A Python script 🐍 for generating random dungeon layouts with entrance, rooms
 ![Dungeon-4](https://github.com/user-attachments/assets/0c9e5293-298b-42c7-987c-55fd3688eeb0)
 
 
+Added more corridors (including diagonal ones) to make the dungeon more interesting, diverse and have more exploration options
+
+
+![Dungeon-5](https://github.com/user-attachments/assets/a007d965-ee31-468b-8598-090a0737b47e)
+
+
+![Dungeon-6](https://github.com/user-attachments/assets/2ee5317a-c99f-41e4-b001-f1ec3ca413f8)
+
+
+![Dungeon-7](https://github.com/user-attachments/assets/c2cf77e5-c066-4781-81fb-30b4853299f8)
+
+
 ### Representations:
 
 - Rooms (squares of 'r' letters) - 🔵
@@ -50,6 +62,7 @@ pip install -r requirements.txt
 3. Run the script to generate a random dungeon layout:
 
 ```
+cd dungeons
 python random_dungeon_layout.py
 ```
 
@@ -58,6 +71,8 @@ python random_dungeon_layout.py
 
 - 🔹 More advanced dungeon generation techniques
 - 🔹 Additional customization options
-- 🔹 Add more corridors for extra exploration
 - 🔹 Secret rooms and bigger rooms
 
+## Feedback & Suggestions
+
+If you have any feedback, feel free to message me! I'm always open to suggestions.
