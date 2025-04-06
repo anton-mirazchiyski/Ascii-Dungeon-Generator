@@ -94,6 +94,10 @@ def mark_corridor_cell(dungeon, row, col):
     dungeon[row][col] = '.'
 
 
+def is_part_of_corridor(dungeon, row, col):
+    return dungeon[row][col] == '.'
+
+
 def is_out_of_bounds(row, col):
     return row >= end_index or row <= start_idx or col >= end_index or col <= start_idx
 
@@ -185,15 +189,15 @@ def generate_additional_corridors(dungeon):
         row, column = get_random_room_or_corridor_cell_in_dungeon(dungeon)
         direction = random.choice(possible_directions)
 
-        for j in range(random.randint(3, 7)):
+        for j in range(random.randint(3, 6)):
             row, column = directions_mapping[direction](row, column)
 
             if is_out_of_bounds(row, column):
                 break
-            if j == 1:
-                # avoids more double corridors
-                if dungeon[row - 1][column] == '.' or dungeon[row + 1][column] == '.':
-                    break
+            # avoids more double corridors
+            if (is_part_of_corridor(dungeon, row - 1, column) and is_part_of_corridor(dungeon, row + 1, column))\
+                    or (is_part_of_corridor(dungeon, row, column - 1) and is_part_of_corridor(dungeon, row, column + 1)):
+                break
             if dungeon[row][column] != '#':
                 direction = random.choice(possible_directions)
                 continue
