@@ -33,7 +33,7 @@ def determine_start_position(dungeon):
             random_coordinates = (random.randint(start_idx, end_index), end_index)
 
     start_row, start_col = random_coordinates
-    dungeon[start_row][start_col] = Fore.YELLOW + 's' + Style.RESET_ALL
+    dungeon[start_row][start_col] = 's'
 
     return start_row, start_col
 
@@ -55,7 +55,7 @@ def position_is_available(row, col, dungeon):
 
 
 def mark_room_cell(dungeon, row, col):
-    dungeon[row][col] = Fore.BLUE + 'r' + Style.RESET_ALL
+    dungeon[row][col] = 'r'
 
 
 def generate_random_room_position():
@@ -91,7 +91,7 @@ def generate_rooms(dungeon):
 
 
 def mark_corridor_cell(dungeon, row, col):
-    dungeon[row][col] = Fore.YELLOW + '.' + Style.RESET_ALL
+    dungeon[row][col] = '.'
 
 
 def is_out_of_bounds(row, col):
@@ -202,7 +202,17 @@ def generate_additional_corridors(dungeon):
 def print_dungeon(dungeon):
     print()
     for row in dungeon:
-        print(*row, sep=' ')
+        colored_row = []
+
+        for element in row:
+            if element == 'r':
+                colored_row.append(Fore.BLUE + element + Style.RESET_ALL)
+            elif element in ('.', 's'):
+                colored_row.append(Fore.YELLOW + element + Style.RESET_ALL)
+            else:
+                colored_row.append(element)
+
+        print(*colored_row, sep=' ')
 
 
 def generate_dungeon():
