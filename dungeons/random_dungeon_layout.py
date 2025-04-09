@@ -113,7 +113,7 @@ def get_random_room_or_corridor_cell_in_dungeon(dungeon):
     while True:
         row_idx = random.randint(start_idx + 1, end_index - 1)
         row = dungeon[row_idx]
-        column_indices = [idx for idx in range(1, len(row) - 1) if row[idx] != '#']
+        column_indices = [idx for idx in range(1, len(row) - 1) if row[idx] == '.' or row[idx] == 'r']
         if column_indices:
             column_idx = random.choice(column_indices)
             break
@@ -181,14 +181,41 @@ def mark_diagonal_corridor_cell(dungeon, row, col, direction):
             dungeon[row][col] = '↘'
 
 
+def mark_dead_end_corridor(dungeon, row, col):
+    dungeon[row][col] = '|'
+
+
+def handle_diagonal_corridor_end(dungeon, direction, corridor, diagonal_directions):
+    opposite_diagonal_directions = {
+        'upper-left': lambda r, c: (r + 1, c + 1),
+        'upper-right': lambda r, c: (r + 1, c - 1),
+        'bottom-left': lambda r, c: (r - 1, c + 1),
+        'bottom-right': lambda r, c: (r - 1, c - 1)
+    }
+
+    last_corridor_part = corridor[-1]
+    last_row, last_column = last_corridor_part
+
+    current_row, current_column = diagonal_directions[direction](last_row, last_column)
+
+    if is_out_of_bounds(current_row, current_column):
+        current_row, current_column = opposite_diagonal_directions[direction](current_row, current_column)
+        mark_dead_end_corridor(dungeon, current_row, current_column)
+
+    if dungeon[current_row][current_column] == '#':
+        mark_dead_end_corridor(dungeon, current_row, current_column)
+
+
 def generate_additional_corridors(dungeon):
-    directions_mapping = {
+    linear_directions_mapping = {
         # linear directions
         'upwards': lambda r, c: (r - 1, c),
         'downwards': lambda r, c: (r + 1, c),
         'left': lambda r, c: (r, c - 1),
         'right': lambda r, c: (r, c + 1),
+    }
 
+    diagonal_directions_mapping = {
         # diagonal directions
         'upper-left': lambda r, c: (r - 1, c - 1),
         'upper-right': lambda r, c: (r - 1, c + 1),
@@ -196,39 +223,48 @@ def generate_additional_corridors(dungeon):
         'bottom-right': lambda  r, c: (r + 1, c + 1)
     }
 
-    possible_directions = [direction for direction in directions_mapping.keys()]
+    all_directions = {**linear_directions_mapping, **diagonal_directions_mapping}
+    possible_directions = [direction for direction in all_directions.keys()]
+    linear_directions, diagonal_directions = possible_directions[:4], possible_directions[4:]
 
-    for i in range(random.randint(3, 6)):
+    diagonal_corridors_limit = 2
+    diagonal_corridors_count = 0
+
+    for i in range(random.randint(3, 7)):
         row, column = get_random_room_or_corridor_cell_in_dungeon(dungeon)
         direction = random.choice(possible_directions)
 
-        corridor_cells = []
+        corridor = []
 
-        for j in range(random.randint(3, 6)):
-            row, column = directions_mapping[direction](row, column)
+        for j in range(random.randint(3, 7)):
+            row, column = all_directions[direction](row, column)
 
             if is_out_of_bounds(row, column):
                 break
-            # avoids more double corridors
-            if j == 1:
-                if (is_part_of_corridor(dungeon, row - 1, column) or is_part_of_corridor(dungeon, row + 1, column))\
-                        or (is_part_of_corridor(dungeon, row, column - 1) or is_part_of_corridor(dungeon, row, column + 1)):
-                    # removes a one-cell corridor
-                    if corridor_cells:
-                        previous_row, previous_col = corridor_cells[0]
-                        # print(previous_row, previous_col)
-                        dungeon[previous_row][previous_col] = '#'
-                    break
-            if dungeon[row][column] != '#':
-                direction = random.choice(possible_directions)
+
+            # prevents diagonal corridors crossing over structures
+            if dungeon[row][column] != '#' and direction in diagonal_directions:
+                break
+            if diagonal_corridors_count >= diagonal_corridors_limit and direction in diagonal_directions:
+                direction = random.choice(linear_directions)
                 continue
 
-            if direction in possible_directions[:4]:
-                mark_corridor_cell(dungeon, row, column)
-            else:
-                mark_diagonal_corridor_cell(dungeon, row, column, direction)
-            corridor_cells.append((row, column))
-            # print(row, column)
+            if dungeon[row][column] == '#':
+                if direction in linear_directions:
+                    mark_corridor_cell(dungeon, row, column)
+                else:
+                    mark_diagonal_corridor_cell(dungeon, row, column, direction)
+                corridor.append((row, column))
+
+        # removes a one-cell corridor
+        if len(corridor) == 1:
+            previous_row, previous_col = corridor[0]
+            dungeon[previous_row][previous_col] = '#'
+            corridor.clear()
+
+        if corridor and direction in diagonal_directions:
+            diagonal_corridors_count += 1
+            handle_diagonal_corridor_end(dungeon, direction, corridor, diagonal_directions_mapping)
 
 
 def print_dungeon(dungeon):
@@ -241,6 +277,8 @@ def print_dungeon(dungeon):
                 colored_row.append(Fore.BLUE + element + Style.RESET_ALL)
             elif element in ('.', 's', '↖', '↗', '↙', '↘'):
                 colored_row.append(Fore.YELLOW + element + Style.RESET_ALL)
+            elif element == '|':
+                colored_row.append(Fore.RED + element + Style.RESET_ALL)
             else:
                 colored_row.append(element)
 
