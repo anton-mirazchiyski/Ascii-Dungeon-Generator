@@ -1,8 +1,9 @@
 import random
 
 from random_dungeon_layout.config import end_idx, start_idx
-from random_dungeon_layout.utils import is_out_of_bounds, get_random_room_or_corridor_cell_in_dungeon
-from random_dungeon_layout.visualizer import mark_corridor_cell, mark_dead_end_corridor, mark_diagonal_corridor_cell
+from random_dungeon_layout.utils import is_out_of_bounds, get_random_room_or_corridor_cell_in_dungeon, \
+    determine_dead_end_or_treasure
+from random_dungeon_layout.visualizer import mark_corridor_cell, mark_diagonal_corridor_cell
 
 
 def create_corridor(dungeon, row, col, previous_row, previous_col):
@@ -67,10 +68,10 @@ def handle_diagonal_corridor_end(dungeon, direction, corridor, diagonal_directio
 
     if is_out_of_bounds(current_row, current_column):
         current_row, current_column = opposite_diagonal_directions[direction](current_row, current_column)
-        mark_dead_end_corridor(dungeon, current_row, current_column)
+        determine_dead_end_or_treasure(dungeon, current_row, current_column)
 
     if dungeon[current_row][current_column] == '#':
-        mark_dead_end_corridor(dungeon, current_row, current_column)
+        determine_dead_end_or_treasure(dungeon, current_row, current_column)
 
 
 def generate_additional_corridors(dungeon):

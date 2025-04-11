@@ -1,4 +1,4 @@
-from random_dungeon_layout.colors import ROOM, CORRIDOR, DEAD_END_CORRIDOR, RESET, ENTRANCE
+from random_dungeon_layout.colors import ROOM, CORRIDOR, DEAD_END_CORRIDOR, ENTRANCE, TREASURE, RESET
 
 
 def mark_entrance(dungeon, row, col):
@@ -30,6 +30,10 @@ def mark_dead_end_corridor(dungeon, row, col):
     dungeon[row][col] = '|'
 
 
+def mark_treasure(dungeon, row, col):
+    dungeon[row][col] = '!'
+
+
 def print_dungeon(dungeon):
     print()
     for row in dungeon:
@@ -44,6 +48,8 @@ def print_dungeon(dungeon):
                 colored_row.append(ENTRANCE + element + RESET)
             elif element == '|':
                 colored_row.append(DEAD_END_CORRIDOR + element + RESET)
+            elif element == '!':
+                colored_row.append(TREASURE + element + RESET)
             else:
                 colored_row.append(element)
 
