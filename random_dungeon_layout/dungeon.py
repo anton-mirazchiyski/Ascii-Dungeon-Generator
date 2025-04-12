@@ -4,7 +4,7 @@ from random_dungeon_layout.config import SIZE, start_idx, end_idx
 from random_dungeon_layout.corridor import generate_corridors_between_rooms, generate_additional_corridors
 from random_dungeon_layout.room import generate_rooms
 from random_dungeon_layout.utils import sort_coordinates_increasingly
-from random_dungeon_layout.visualizer import print_dungeon, mark_entrance
+from random_dungeon_layout.visualizer import mark_entrance
 
 
 def build_dungeon_without_rooms():
@@ -43,4 +43,5 @@ def generate_dungeon():
     sorted_rooms_coordinates = sort_coordinates_increasingly(rooms_coordinates + [(row_start, col_start)])
     generate_corridors_between_rooms(dungeon, sorted_rooms_coordinates)
     generate_additional_corridors(dungeon)
-    print_dungeon(dungeon)
+
+    return dungeon

@@ -54,3 +54,73 @@ def print_dungeon(dungeon):
                 colored_row.append(element)
 
         print(*colored_row, sep=' ')
+
+
+def save_output_to_html_file(dungeon):
+    styles = '''
+        body {
+            background-color: #202225;
+            color: #ffff;
+            font-size: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+        
+        h1 {
+            font-weight: bold;
+        }
+        
+        p {
+            line-height: 1.3;
+        }
+        
+        .room {
+            color: #2362c0;
+        }
+        
+        .corridor {
+            color: #996a19;
+        }
+        
+    '''
+
+    document_title = 'Generated Dungeon'
+    first_heading = 'Random Dungeon Layout'
+
+    output_result = ''
+
+    classes = {
+        'r': 'room',
+        '.': 'corridor',
+        '↖' : 'corridor',
+        '↗' : 'corridor',
+        '↙' : 'corridor',
+        '↘': 'corridor',
+        's': 'entrance',
+        '|': 'dead-end',
+        '!': 'treasure',
+        '#': 'wall',
+    }
+
+    for row in dungeon:
+        paragraph = '<p>' + ''.join([f'<span class={classes[element]}>{element}</span>' for element in row]) + '</p>\n'
+        output_result += paragraph
+
+    html_content = f'''
+        <html>
+            <head>
+                <title>{document_title}</title>
+                <style>{styles}</style>
+            </head>
+            <body>
+                <h1>{first_heading}</h1>
+                <div>
+                    {output_result}
+                </div>
+            </body>
+        </html>
+    '''
+
+    with open('export/dungeon-layout.html', 'w') as file:
+        file.write(html_content)
