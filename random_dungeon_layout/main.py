@@ -5,4 +5,4 @@ from random_dungeon_layout.visualizer import print_dungeon, save_output_to_html_
 if __name__ == '__main__':
     dungeon = generate_dungeon()
     print_dungeon(dungeon)
-    # save_output_to_html_file(dungeon)
+    save_output_to_html_file(dungeon)

@@ -1,4 +1,8 @@
+import random
+import time
+
 from random_dungeon_layout.colors import ROOM, CORRIDOR, DEAD_END_CORRIDOR, ENTRANCE, TREASURE, RESET
+from random_dungeon_layout.utils import take_user_choice_for_output_save
 
 
 def mark_entrance(dungeon, row, col):
@@ -34,6 +38,14 @@ def mark_treasure(dungeon, row, col):
     dungeon[row][col] = '!'
 
 
+def determine_dead_end_or_treasure(dungeon, row, col):
+    # some chance to spawn a treasure at the end of an unconnected corridor, otherwise - dead-end
+    if random.random() <= 0.2:
+        mark_treasure(dungeon, row, col)
+    else:
+        mark_dead_end_corridor(dungeon, row, col)
+
+
 def print_dungeon(dungeon):
     print()
     for row in dungeon:
@@ -57,6 +69,15 @@ def print_dungeon(dungeon):
 
 
 def save_output_to_html_file(dungeon):
+    print()
+    time.sleep(0.5)
+
+    user_choice = take_user_choice_for_output_save()
+    if not user_choice:
+        return
+
+    file_name = input('Choose a file name: ')
+
     styles = '''
         body {
             background-color: #202225;
@@ -143,5 +164,5 @@ def save_output_to_html_file(dungeon):
         </html>
     '''
 
-    with open('export/dungeon-layout.html', 'w', encoding='utf-8') as file:
+    with open(f'export/{file_name}.html', 'w', encoding='utf-8') as file:
         file.write(html_content)

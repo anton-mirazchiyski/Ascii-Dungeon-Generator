@@ -1,7 +1,6 @@
 import random
 
 from random_dungeon_layout.config import start_idx, end_idx
-from random_dungeon_layout.visualizer import mark_treasure, mark_dead_end_corridor
 
 
 def generate_random_room_position():
@@ -41,9 +40,13 @@ def get_random_room_or_corridor_cell_in_dungeon(dungeon):
     return row_idx, column_idx
 
 
-def determine_dead_end_or_treasure(dungeon, row, col):
-    # some chance to spawn a treasure at the end of an unconnected corridor, otherwise - dead-end
-    if random.random() <= 0.2:
-        mark_treasure(dungeon, row, col)
-    else:
-        mark_dead_end_corridor(dungeon, row, col)
+def take_user_choice_for_output_save():
+    choice = input('Do you want to save output to html file? y/n: ')
+
+    if choice not in ('y', 'n'):
+        take_user_choice_for_output_save()
+
+    if choice == 'n':
+        return False
+
+    return True

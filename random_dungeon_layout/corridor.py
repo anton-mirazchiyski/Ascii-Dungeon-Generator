@@ -1,9 +1,9 @@
 import random
 
 from random_dungeon_layout.config import end_idx, start_idx
-from random_dungeon_layout.utils import is_out_of_bounds, get_random_room_or_corridor_cell_in_dungeon, \
+from random_dungeon_layout.utils import is_out_of_bounds, get_random_room_or_corridor_cell_in_dungeon
+from random_dungeon_layout.visualizer import mark_corridor_cell, mark_diagonal_corridor_cell, \
     determine_dead_end_or_treasure
-from random_dungeon_layout.visualizer import mark_corridor_cell, mark_diagonal_corridor_cell
 
 
 def create_corridor(dungeon, row, col, previous_row, previous_col):
