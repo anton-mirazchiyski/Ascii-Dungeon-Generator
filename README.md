@@ -1,6 +1,6 @@
 # **Procedural Dungeon Generator**
 
-_A Python script 🐍 for generating random dungeon layouts with entrance, rooms and corridors._
+_A Python program 🐍 for generating random dungeon layouts with entrance, rooms and corridors._
 
 
 ## Features
@@ -9,12 +9,10 @@ _A Python script 🐍 for generating random dungeon layouts with entrance, rooms
 - ✔️ Rooms connected by corridors
 - ✔️ Basic ASCII visualization in the console
 - ✔️ Procedural generation principles
+- ✔️ Choice to save interesting generations/outputs to an HTML file
 
 
 ## Example Outputs
-
-![Dungeon-1](https://github.com/user-attachments/assets/344caedb-8cae-46df-92e4-81a33f7f0aa7)
-
 
 ![Dungeon-2](https://github.com/user-attachments/assets/2999ce52-8e64-476c-8efb-90e448af4212)
 
@@ -28,17 +26,21 @@ _A Python script 🐍 for generating random dungeon layouts with entrance, rooms
 Added more corridors (including diagonal ones) to make the dungeon more interesting, diverse and have more exploration options.
 There could be dead-end corridors.
 
-
-![Dungeon-8](https://github.com/user-attachments/assets/dddc9748-a362-421c-9e04-3fc99901908b)
-
-
-![Dungeon-9](https://github.com/user-attachments/assets/7e849a63-b7d7-4f70-a07f-d8c0de616b3f)
+![Dungeon-12](https://github.com/user-attachments/assets/517b2e05-1965-42e6-8afe-bd1159e1d883)
 
 
-![Dungeon-10](https://github.com/user-attachments/assets/a093cfc2-c68e-4ab7-b02a-9c23d3b3e50e)
+![Dungeon-16](https://github.com/user-attachments/assets/835eb208-a41e-4b9d-88bc-0d7780488473)
 
 
-![Dungeon-11](https://github.com/user-attachments/assets/d606bf21-7b15-435d-acfc-30369b7920df)
+
+![Dungeon-13](https://github.com/user-attachments/assets/006792b8-dad8-4d5a-94af-4455215616dd)
+
+
+![Dungeon-14](https://github.com/user-attachments/assets/4b4f4f2e-bc82-417e-9a9e-4f14eb826372)
+
+
+![Dungeon-22](https://github.com/user-attachments/assets/0a1d830c-5c57-4a49-8a8a-395e790ac504)
+
 
 
 ### Representations:
@@ -49,6 +51,16 @@ There could be dead-end corridors.
 -   - diagonal - arrows
 - Entrance ('s') - 🟨
 - Walls (#) - ⬜
+- Dead-end corridors ('|') - 🟥
+- Treasures (!) - 🟩
+
+## Example Outputs saved in HTML file
+
+![Screenshot 2025-04-13 at 23-06-30 Generated Dungeon](https://github.com/user-attachments/assets/07f0146d-a68e-4808-a0e5-8ff48c2d0d21)
+
+
+![Screenshot 2025-04-13 at 23-09-31 Generated Dungeon](https://github.com/user-attachments/assets/6dc3345c-a0cf-42d8-b1f0-fe9c04d60c3a)
+
 
 
 ## Installation and Usage
@@ -56,7 +68,7 @@ There could be dead-end corridors.
 1. Clone the repository:
 
 ```
-git clone https://github.com/anton-mirazchiyski/Procedural-Generation.git
+git clone https://github.com/anton-mirazchiyski/Ascii-Dungeon-Generator.git
 ```
 
 2. Install dependencies inside a virtual environment:
@@ -68,16 +80,15 @@ pip install -r requirements.txt
 3. Run the script to generate a random dungeon layout:
 
 ```
-cd dungeons
-python random_dungeon_layout.py
+python -m random_dungeon_layout.main
 ```
+or navigate to the ```main.py``` module and run it manually
 
+## Tip: Disable Input Prompting
 
-## Planned features
+If you don't want to be prompted for input after each generation, you can just comment out the
+```save_output_to_html_file()``` function in the ```if __name__ == '__main__'``` block
 
-- 🔹 More advanced dungeon generation techniques
-- 🔹 Additional customization options
-- 🔹 Secret rooms and bigger rooms
 
 ## Feedback & Suggestions
 
