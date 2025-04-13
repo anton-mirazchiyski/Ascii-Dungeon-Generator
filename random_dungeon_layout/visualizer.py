@@ -60,19 +60,40 @@ def save_output_to_html_file(dungeon):
     styles = '''
         body {
             background-color: #202225;
-            color: #ffff;
+            color: #dfd7d7;
+            font-family: sans-serif;
             font-size: 1rem;
             display: flex;
+            min-width: 100vh;
             flex-direction: column;
+            align-items: center;
             gap: 2rem;
         }
         
         h1 {
+            margin-top: 2rem;
             font-weight: bold;
         }
         
         p {
-            line-height: 1.3;
+            line-height: 0.9;
+        }
+        
+        span {
+            display: inline-block;
+            margin-right: 0.5rem;
+            min-width: 0.8rem;
+            padding: 0 0.2rem;
+        }
+        
+        .dungeon {
+            text-align: center;
+            font-size: 1.25rem;
+            padding: 1rem;
+        }
+        
+        .entrance {
+            color: #996a19;
         }
         
         .room {
@@ -83,6 +104,13 @@ def save_output_to_html_file(dungeon):
             color: #996a19;
         }
         
+        .dead-end {
+            color: #ce3b2d;
+        }
+        
+        .treasure {
+            color: #35a113;
+        }
     '''
 
     document_title = 'Generated Dungeon'
@@ -90,37 +118,30 @@ def save_output_to_html_file(dungeon):
 
     output_result = ''
 
-    classes = {
-        'r': 'room',
-        '.': 'corridor',
-        '↖' : 'corridor',
-        '↗' : 'corridor',
-        '↙' : 'corridor',
-        '↘': 'corridor',
-        's': 'entrance',
-        '|': 'dead-end',
-        '!': 'treasure',
-        '#': 'wall',
-    }
+    classes = {'r': 'room', '.': 'corridor', '↖' : 'corridor', '↗' : 'corridor', '↙' : 'corridor', '↘': 'corridor',
+                's': 'entrance', '|': 'dead-end',  '!': 'treasure', '#': 'wall',}
 
     for row in dungeon:
-        paragraph = '<p>' + ''.join([f'<span class={classes[element]}>{element}</span>' for element in row]) + '</p>\n'
+        paragraph = '<p>' + ''.join([f'<span class="{classes[element]}">{element}</span>' for element in row]) + '</p>\n'
         output_result += paragraph
 
     html_content = f'''
         <html>
-            <head>
-                <title>{document_title}</title>
-                <style>{styles}</style>
-            </head>
-            <body>
-                <h1>{first_heading}</h1>
-                <div>
-                    {output_result}
-                </div>
-            </body>
+        <head>
+            <meta charset="UTF-8">
+            <title>{document_title}</title>
+            <style>
+                {styles}
+            </style>
+         </head>
+        <body>
+            <h1>{first_heading}</h1>
+            <div class="dungeon">
+                {output_result}
+            </div>
+        </body>
         </html>
     '''
 
-    with open('export/dungeon-layout.html', 'w') as file:
+    with open('export/dungeon-layout.html', 'w', encoding='utf-8') as file:
         file.write(html_content)
