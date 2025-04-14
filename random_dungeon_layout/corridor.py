@@ -1,7 +1,8 @@
 import random
 
 from random_dungeon_layout.config import end_idx, start_idx
-from random_dungeon_layout.utils import is_out_of_bounds, get_random_room_or_corridor_cell_in_dungeon
+from random_dungeon_layout.utils import is_out_of_bounds, get_random_room_or_corridor_cell_in_dungeon, \
+    handle_corridor_edge_cases_with_dungeon_entrance
 from random_dungeon_layout.visualizer import mark_corridor_cell, mark_diagonal_corridor_cell, \
     determine_dead_end_or_treasure
 
@@ -10,13 +11,6 @@ def create_corridor(dungeon, row, col, previous_row, previous_col):
     if row == previous_row and col == previous_col:
         return
 
-    if previous_row == end_idx - 1:
-        if col > previous_col:
-            create_corridor(dungeon, row, col, previous_row, previous_col + 1)  # move towards the right
-
-        if col < previous_col:
-            create_corridor(dungeon, row, col, previous_row, previous_col - 1)  # move towards the left
-
     if is_out_of_bounds(previous_row, previous_col):
         return
 
@@ -24,8 +18,11 @@ def create_corridor(dungeon, row, col, previous_row, previous_col):
         mark_corridor_cell(dungeon, previous_row, previous_col)
 
     # chooses a direction for the path
-    if row != previous_row:
+    if row > previous_row:
         return create_corridor(dungeon, row, col, previous_row + 1, previous_col) # move downwards
+
+    elif row < previous_row:
+        return create_corridor(dungeon, row, col, previous_row - 1, previous_col)  # move upwards
 
     if col > previous_col:
         return create_corridor(dungeon, row, col, previous_row, previous_col + 1)  # move towards the right
@@ -40,14 +37,11 @@ def generate_corridors_between_rooms(dungeon, rooms_coordinates):
         previous_row, previous_col = rooms_coordinates[idx - 1]
 
         # handles edge cases with the dungeon entrance
-        if previous_col == start_idx:
-            previous_row += 1
-            previous_col += 1
-        elif previous_col == end_idx:
-            previous_row += 1
-            previous_col -= 1
-        elif previous_row == start_idx:
-            previous_row += 1
+        if current_row == end_idx:
+            current_row, previous_row = previous_row, current_row
+            current_col, previous_col = previous_col, current_col
+
+        previous_row, previous_col = handle_corridor_edge_cases_with_dungeon_entrance(previous_row, previous_col)
 
         # the recursive function that creates the corridors/paths
         create_corridor(dungeon, current_row, current_col, previous_row, previous_col)

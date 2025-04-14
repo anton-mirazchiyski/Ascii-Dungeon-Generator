@@ -40,6 +40,21 @@ def get_random_room_or_corridor_cell_in_dungeon(dungeon):
     return row_idx, column_idx
 
 
+def handle_corridor_edge_cases_with_dungeon_entrance(row, col):
+    if row == start_idx:    # top edge
+        row = row + 1
+    elif row == end_idx:    # bottom edge
+        row = row - 1
+
+    if col == start_idx:   # left edge
+        return row, col + 1
+
+    if col == end_idx:     # right edge
+        return row, col - 1
+
+    return row, col
+
+
 def take_user_choice_for_output_save():
     choice = input('Do you want to save output to html file? y/n: ')
 
